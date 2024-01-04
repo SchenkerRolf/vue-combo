@@ -1,6 +1,11 @@
 <template>
   <div>
-    <input v-model="searchText" @input="searchTags" placeholder="Search or add a tag" />
+    <input 
+      v-model="searchText" 
+      @input="searchTags" 
+      @keydown="handleKeydown" 
+      placeholder="Search or add a tag" 
+    />
 
     <div v-if="equalTags.length == 0 && searchText.length > 0">
       <ul class="tagList">
@@ -12,7 +17,12 @@
 
     <div>
       <ul class="tagList" v-if="matchingTags.length > 0 && searchText.length > 0">
-        <li class="altTag" v-for="(tag, index) in matchingTags" :key="index" @click="selectTag(tag)">
+        <li 
+          class="altTag" 
+          v-for="(tag, index) in matchingTags" :key="index" 
+          @click="selectTag(tag)"
+          :class="{ selected: selectedIndex === index }"
+        >
           {{ tag }}
         </li>
       </ul>
@@ -20,7 +30,11 @@
 
     <div>
       <ul class="selectedTags">
-        <li v-for="tag in myTags" :key="tag" @click="removeTag(tag)">{{ tag }}</li>
+        <li 
+          v-for="tag in myTags" 
+          :key="tag"
+          @click="removeTag(tag)"
+        >{{ tag }}</li>
       </ul>
     </div>
   </div>
@@ -32,6 +46,7 @@ import { ref, computed } from 'vue';
 const tags = ref(['abcd', 'asdf', 'sdfg']); // Initial list of tags
 const searchText = ref('');
 const myTags = ref([]);
+const selectedIndex = ref(-1);
 
 const matchingTags = computed(() => {
   let matching = tags.value.filter(tag => tag.includes(searchText.value));
@@ -58,6 +73,7 @@ function selectTag(tag) {
   searchText.value = '';
 
   myTags.value.push(tag)
+  selectedIndex.value = -1
 }
 
 function newTag(tag) {
@@ -72,6 +88,22 @@ function removeTag(tag) {
   myTags.value = sodeli
 }
 
+function handleKeydown(event) {
+  const key = event.key;
+  if (key === 'ArrowUp') {
+    selectedIndex.value--;
+    if (selectedIndex.value < 0) {
+      selectedIndex.value = matchingTags.value.length - 1;
+    }
+  } else if (key === 'ArrowDown') {
+    selectedIndex.value++;
+    if (selectedIndex.value >= matchingTags.value.length) {
+      selectedIndex.value = 0;
+    }
+  } else if (key === 'Enter') {
+    selectTag(matchingTags.value[selectedIndex.value]);
+  }
+}
 
 </script>
 
@@ -89,7 +121,6 @@ function removeTag(tag) {
   margin-right: 1em;
   background-color: lightblue
 }
-
 .tagList {
   display: inline-block;
   width: 50%;
@@ -102,5 +133,7 @@ function removeTag(tag) {
 .selectedTags {
   list-style-type: none;
   padding-left: 0
+.selected {
+ background-color: #ccc;
 }
 </style>
