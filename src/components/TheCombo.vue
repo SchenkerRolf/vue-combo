@@ -133,6 +133,7 @@ function handleKeydown(event) {
 .selectedTags {
   list-style-type: none;
   padding-left: 0
+}
 .selected {
  background-color: #ccc;
 }
