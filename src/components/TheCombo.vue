@@ -219,12 +219,14 @@ function selectedOption(index) {
 
 .tagListContainer {
   height: 5ex;
+  position: relative;
+  z-index: 5;
 }
 .tagList {
   display: inline-block;
   list-style-type: none;
   padding: 0.5em;
-  padding-top: 0;
+  padding-top: 0.2em;
   margin: 0;
   margin-left: 2px;
   max-height: 20ex;
@@ -240,17 +242,19 @@ function selectedOption(index) {
 }
 
 ul.tagList li {
-  height: 4ex;
+  height: 4.5ex;
 }
 
 .tagList .tag {
     position: relative;
-    top: 0.5em;  
+    top: 6px;  
 }
 
 .selectedTags {
   list-style-type: none;
-  padding-left: 0
+  padding-left: 0;
+  position: relative;
+  z-index: 1;
 }
 
 .selectedTags li {
