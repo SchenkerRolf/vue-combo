@@ -248,15 +248,27 @@ ul.tagList li {
   border-bottom-left-radius: 1em;
   padding: 0.5em 0 0.5em 1em;
 }
+.neuTag .tagCat {
+  background-color: purple;
+  color: white
+}
 .tagDot {
   background-color: lightpink;
   padding: 0.5em 0;
+}
+.neuTag .tagDot {
+  background-color: purple;
+  color: white
 }
 .tagTag {
   background-color: lightgreen;
   border-top-right-radius: 1em;
   border-bottom-right-radius: 1em;
   padding: 0.5em 1em 0.5em 0;
+}
+.neuTag .tagTag {
+  background-color: green;
+  color: white
 }
 ul.selectedTags li span.tag span.tagTag {
   padding: 0.5em 0.5em 0.5em 0;
