@@ -16,6 +16,7 @@
           class="neuTag"
           @click="newTag(searchText)"
           v-if="equalTags.length == 0 && searchText.length > 0"
+          :class="selectedOption(-1)"
         >
           {{ searchText }}
         </li>
@@ -24,7 +25,7 @@
           class="altTag" 
           v-for="(tag, index) in matchingTags" :key="index" 
           @click="selectTag(tag)"
-          :class="{ selected: selectedIndex === index }"
+          :class="selectedOption(index)"
         >
           {{ tag }}
         </li>
@@ -68,6 +69,14 @@ const equalTags = computed(() => {
   return equalUnselected.concat(euqalSelected);
 });
 
+const optionsLength = computed(() => {
+  if (equalTags.length == 0 && searchText.length > 0) {
+    return matchingTags.value.length
+  } else {
+    return matchingTags.value.length + 1
+  }
+})
+
 function searchTags() {
   if (!tags.value.filter(element => element.includes(searchText.value))) {
     // wenn kein Tag den Suchtext enthält...
@@ -99,17 +108,30 @@ function handleKeydown(event) {
   if (key === 'ArrowUp') {
     selectedIndex.value--;
     if (selectedIndex.value < 0) {
-      selectedIndex.value = matchingTags.value.length - 1;
+      selectedIndex.value = optionsLength.value - 1;
     }
   } else if (key === 'ArrowDown') {
     selectedIndex.value++;
-    if (selectedIndex.value >= matchingTags.value.length) {
+    if (selectedIndex.value >= optionsLength.value) {
       selectedIndex.value = 0;
     }
   } else if (key === 'Enter') {
     selectTag(matchingTags.value[selectedIndex.value]);
   } else if (key === 'Escape') {
     showOptions.value = !showOptions.value;
+  }
+}
+
+function selectedOption(index) {
+
+  if (equalTags.value.length == 0 && searchText.value.length > 0) {
+    if (selectedIndex.value == index + 1) {
+      return "selected"
+    }
+  } else {
+    if (selectedIndex.value == index) {
+      return "selected"
+    }
   }
 }
 
