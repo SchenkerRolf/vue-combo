@@ -68,6 +68,9 @@ const myTags = ref([]);
 const selectedIndex = ref(-1);
 const showOptions = ref(true);
 
+
+// list of existing tags to display
+// (an eventual new tag is not part of this list)
 const matchingTags = computed(() => {
   if (searchText.value.length > 0) {
     // tag includes search text
@@ -96,6 +99,8 @@ const matchingTags = computed(() => {
   }
 });
 
+
+// is this tag already selected?
 const equalTags = computed(() => {
   // array contains 
   let equalUnselected = tags.value.filter(
@@ -107,6 +112,8 @@ const equalTags = computed(() => {
   return equalUnselected.concat(equalSelected);
 });
 
+
+// how many options should be displayed?
 const optionsLength = computed(() => {
   if (equalTags.length == 0 && searchText.length > 0) {
     return matchingTags.value.length
@@ -115,10 +122,14 @@ const optionsLength = computed(() => {
   }
 })
 
+
+// when text in search field changes
 function searchTags() {
   showOptions.value = true
 }
 
+
+// existing tag is selected
 function selectTag(tag) {
   searchText.value = '';
 
@@ -126,6 +137,8 @@ function selectTag(tag) {
   selectedIndex.value = -1
 }
 
+
+// new tag is selected
 function newTag(tag) {
   var newTagObj = { "cat": "neu", "tag": searchText.value }
   tags.value.push(newTagObj)
@@ -134,11 +147,15 @@ function newTag(tag) {
   selectedIndex.value = -1
 }
 
+
+// selected tag should be removed
 function removeTag(tag) {
   var sodeli = myTags.value.filter(element => (element.cat !== tag.cat || element.tag !== tag.tag))
   myTags.value = sodeli
 }
 
+
+// keyboard control
 function handleKeydown(event) {
   const key = event.key;
   if (key === 'ArrowUp') {
@@ -166,8 +183,9 @@ function handleKeydown(event) {
   }
 }
 
-function selectedOption(index) {
 
+// class for selected option in list
+function selectedOption(index) {
   if (equalTags.value.length == 0 && searchText.value.length > 0) {
     if (selectedIndex.value == index + 1) {
       return "selected"
