@@ -69,7 +69,6 @@ const equalTags = computed(() => {
 });
 
 function searchTags() {
-  console.log("equalTags: " + equalTags.value);
   if (!tags.value.filter(element => element.includes(searchText.value))) {
     // wenn kein Tag den Suchtext enthält...
     tags.value.push(searchText.value);
@@ -85,7 +84,6 @@ function selectTag(tag) {
 }
 
 function newTag(tag) {
-  console.log("tag: " + tag)
   tags.value.push(tag)
   myTags.value.push(tag)
   searchText.value = ''
