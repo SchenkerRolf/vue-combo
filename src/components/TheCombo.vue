@@ -7,16 +7,19 @@
       placeholder="Search or add a tag" 
     />
 
-    <div v-if="equalTags.length == 0 && searchText.length > 0 && showOptions">
-      <ul class="tagList">
-        <li class="neuTag" @click="newTag(searchText)">
+    <div>
+      <ul 
+        class="tagList"
+        v-if="showOptions"
+      >
+        <li 
+          class="neuTag"
+          @click="newTag(searchText)"
+          v-if="equalTags.length == 0 && searchText.length > 0"
+        >
           {{ searchText }}
         </li>
-      </ul>
-    </div>
 
-    <div>
-      <ul class="tagList" v-if="matchingTags.length > 0 && searchText.length > 0 && showOptions">
         <li 
           class="altTag" 
           v-for="(tag, index) in matchingTags" :key="index" 
@@ -50,9 +53,13 @@ const selectedIndex = ref(-1);
 const showOptions = ref(true);
 
 const matchingTags = computed(() => {
-  let matching = tags.value.filter(tag => tag.includes(searchText.value));
-  let filtered = matching.filter(element => !myTags.value.includes(element));
-  return filtered;
+  if (searchText.value.length > 0) {
+    let matching = tags.value.filter(tag => tag.includes(searchText.value));
+    let filtered = matching.filter(element => !myTags.value.includes(element));
+    return filtered;
+  } else {
+    return [];
+  }
 });
 
 const equalTags = computed(() => {
