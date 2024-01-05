@@ -18,7 +18,11 @@
           v-if="equalTags.length == 0 && searchText.length > 0"
           :class="selectedOption(-1)"
         >
-          {{ searchText }}
+          <span class="tag">
+            <span class="tagCat">neu</span>
+            <span class="tagDot">.</span>
+            <span class="tagTag">{{ searchText }}</span>
+          </span>
         </li>
 
         <li 
@@ -27,7 +31,11 @@
           @click="selectTag(tag)"
           :class="selectedOption(index)"
         >
-          {{ tag.cat }}.{{ tag.tag }}
+          <span class="tag">
+            <span class="tagCat">{{ tag.cat }}</span>
+            <span class="tagDot">.</span>
+            <span class="tagTag">{{ tag.tag }}</span>
+          </span>
         </li>
       </ul>
     </div>
