@@ -77,14 +77,6 @@ const optionsLength = computed(() => {
   }
 })
 
-function searchTags() {
-  if (!tags.value.filter(element => element.includes(searchText.value))) {
-    // wenn kein Tag den Suchtext enthält...
-    tags.value.push(searchText.value);
-    searchText.value = '';
-  }
-}
-
 function selectTag(tag) {
   searchText.value = '';
 
