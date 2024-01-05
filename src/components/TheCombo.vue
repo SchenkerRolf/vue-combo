@@ -1,24 +1,30 @@
 <template>
   <div>
+
     <input 
       v-model="searchText" 
       @input="searchTags" 
       @keydown="handleKeydown" 
       placeholder="Search or add a tag" 
+      class="searchText"
     />
 
-    <div class="tagListContainer">
+    <div
+      class="tagListContainer"
+    >
       <ul 
         class="tagList"
-        v-if="showOptions"
+        v-if="showOptions && ((equalTags.length == 0 && searchText.length > 0) || matchingTags.length > 0)"
       >
         <li 
           class="neuTag"
-          @click="newTag(searchText)"
           v-if="equalTags.length == 0 && searchText.length > 0"
           :class="selectedOption(-1)"
         >
-          <span class="tag">
+          <span
+            class="tag"
+            @click="newTag(searchText)"
+          >
             <span class="tagCat">neu</span>
             <span class="tagDot">.</span>
             <span class="tagTag">{{ searchText }}</span>
@@ -28,10 +34,12 @@
         <li 
           class="altTag" 
           v-for="(tag, index) in matchingTags" :key="index" 
-          @click="selectTag(tag)"
           :class="selectedOption(index)"
         >
-          <span class="tag">
+          <span 
+            class="tag"
+            @click="selectTag(tag)"
+          >
             <span class="tagCat">{{ tag.cat }}</span>
             <span class="tagDot">.</span>
             <span class="tagTag">{{ tag.tag }}</span>
@@ -200,26 +208,39 @@ function selectedOption(index) {
 </script>
 
 <style scoped>
+.searchText {
+  box-sizing: border-box;
+  width: 150px;
+}
 .selectedTags li .tag {
   display: inline-block;
   margin-right: 1em;
 }
 
 .tagListContainer {
-  height: 21ex;
+  height: 5ex;
 }
 .tagList {
   display: inline-block;
-  width: 50%;
   list-style-type: none;
-  padding-left: 0;
-  margin-top: 1em;
-  margin-bottom: 0;
-  height: 20ex;
+  padding: 0.5em;
+  padding-top: 0;
+  margin: 0;
+  margin-left: 2px;
+  max-height: 20ex;
+  overflow-y: auto;
+  border-radius: 2px;
+  box-sizing: border-box;
+  width: 146px;
+  background-color: white;
+  box-shadow: 0 10px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19) !important;
+  -webkit-user-select: none;
+  -ms-user-select: none; 
+  user-select: none; 
 }
 
 ul.tagList li {
-  height: 5ex;
+  height: 4ex;
 }
 
 .tagList .tag {
@@ -246,7 +267,7 @@ ul.tagList li {
   background-color: lightpink;
   border-top-left-radius: 1em;
   border-bottom-left-radius: 1em;
-  padding: 0.5em 0 0.5em 1em;
+  padding: 0.3em 0 0.3em 0.6em;
 }
 .neuTag .tagCat {
   background-color: purple;
@@ -254,7 +275,7 @@ ul.tagList li {
 }
 .tagDot {
   background-color: lightpink;
-  padding: 0.5em 0;
+  padding: 0.3em 0;
 }
 .neuTag .tagDot {
   background-color: purple;
@@ -264,20 +285,20 @@ ul.tagList li {
   background-color: lightgreen;
   border-top-right-radius: 1em;
   border-bottom-right-radius: 1em;
-  padding: 0.5em 1em 0.5em 0;
+  padding: 0.3em 0.6em 0.3em 0;
 }
 .neuTag .tagTag {
   background-color: green;
   color: white
 }
 ul.selectedTags li span.tag span.tagTag {
-  padding: 0.5em 0.5em 0.5em 0;
+  padding: 0.3em 0.3em 0.3em 0;
   border-radius: 0;
 }
 .tagDelete {
   background-color: lightgrey;
   border-top-right-radius: 1em;
   border-bottom-right-radius: 1em;
-  padding: 0.5em 1em 0.5em 0.5em;
+  padding: 0.3em 0.6em 0.3em 0.3em;
 }
 </style>
