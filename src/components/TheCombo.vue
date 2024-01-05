@@ -7,7 +7,7 @@
       placeholder="Search or add a tag" 
     />
 
-    <div>
+    <div class="tagListContainer">
       <ul 
         class="tagList"
         v-if="showOptions"
@@ -46,7 +46,14 @@
           v-for="tag in myTags" 
           :key="tag"
           @click="removeTag(tag)"
-        >{{ tag.cat }}.{{ tag.tag }}</li>
+        >
+          <span class="tag">
+            <span class="tagCat">{{ tag.cat }}</span>
+            <span class="tagDot">.</span>
+            <span class="tagTag">{{ tag.tag }}</span>
+            <span class="tagDelete">x</span>
+          </span>
+        </li>
       </ul>
     </div>
   </div>
@@ -168,27 +175,31 @@ function selectedOption(index) {
 </script>
 
 <style scoped>
-.neuTag {
-  background-color: lightpink
-}
-
-.altTag {
-  background-color: lightgreen;
-}
-
-.selectedTags li {
+.selectedTags li .tag {
   display: inline-block;
   margin-right: 1em;
-  background-color: lightblue
 }
 
+.tagListContainer {
+  height: 21ex;
+}
 .tagList {
   display: inline-block;
   width: 50%;
   list-style-type: none;
   padding-left: 0;
-  margin-top: 0;
-  margin-bottom: 0
+  margin-top: 1em;
+  margin-bottom: 0;
+  height: 20ex;
+}
+
+ul.tagList li {
+  height: 5ex;
+}
+
+.tagList .tag {
+    position: relative;
+    top: 0.5em;  
 }
 
 .selectedTags {
@@ -196,7 +207,40 @@ function selectedOption(index) {
   padding-left: 0
 }
 
+.selectedTags li {
+  display: inline-block
+}
+
 .selected {
   background-color: #ccc;
+}
+.tag {
+  cursor: pointer
+}
+.tagCat {
+  background-color: lightpink;
+  border-top-left-radius: 1em;
+  border-bottom-left-radius: 1em;
+  padding: 0.5em 0 0.5em 1em;
+}
+.tagDot {
+  background-color: lightpink;
+  padding: 0.5em 0;
+}
+.tagTag {
+  background-color: lightgreen;
+  border-top-right-radius: 1em;
+  border-bottom-right-radius: 1em;
+  padding: 0.5em 1em 0.5em 0;
+}
+ul.selectedTags li span.tag span.tagTag {
+  padding: 0.5em 0.5em 0.5em 0;
+  border-radius: 0;
+}
+.tagDelete {
+  background-color: lightgrey;
+  border-top-right-radius: 1em;
+  border-bottom-right-radius: 1em;
+  padding: 0.5em 1em 0.5em 0.5em;
 }
 </style>
