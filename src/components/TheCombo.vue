@@ -27,7 +27,7 @@
           @click="selectTag(tag)"
           :class="selectedOption(index)"
         >
-          {{ tag }}
+          {{ tag.cat }}.{{ tag.tag }}
         </li>
       </ul>
     </div>
@@ -38,7 +38,7 @@
           v-for="tag in myTags" 
           :key="tag"
           @click="removeTag(tag)"
-        >{{ tag }}</li>
+        >{{ tag.cat }}.{{ tag.tag }}</li>
       </ul>
     </div>
   </div>
@@ -47,7 +47,7 @@
 <script setup>
 import { ref, computed } from 'vue';
 
-const tags = ref(['abcd', 'asdf', 'sdfg']); // Initial list of tags
+const tags = ref([{ cat: 'prj', tag: 'abcd' }, { cat: 'lala', tag: 'asdf' }, { cat: 'abc', tag: 'sdfg' }]); // Initial list of tags
 const searchText = ref('');
 const myTags = ref([]);
 const selectedIndex = ref(-1);
@@ -55,18 +55,34 @@ const showOptions = ref(true);
 
 const matchingTags = computed(() => {
   if (searchText.value.length > 0) {
-    let matching = tags.value.filter(tag => tag.includes(searchText.value));
-    let filtered = matching.filter(element => !myTags.value.includes(element));
-    return filtered;
+    // tag includes search text
+    let matching = tags.value.filter(
+      tag => (tag.cat + "." + tag.tag).includes(searchText.value)
+    );
+    // tag is not selected
+    let filtered = []
+    if (myTags.value.length > 0) {
+      filtered = matching.filter(
+        a => !myTags.value.some(b => (a.cat === b.cat) & (a.tag === b.tag))
+      )
+    } else {
+      filtered = matching
+    }
+    return filtered.sort((a, b) => b.cat - a.cat)
   } else {
     return [];
   }
 });
 
 const equalTags = computed(() => {
-  let equalUnselected = tags.value.filter(tag => tag == searchText.value);
-  let euqalSelected = myTags.value.filter(tag => tag == searchText.value);
-  return equalUnselected.concat(euqalSelected);
+  // array contains 
+  let equalUnselected = tags.value.filter(
+    tag => (tag.cat + "." + tag.tag) == searchText.value || (tag.cat + "." + tag.tag) == "neu." + searchText.value
+  );
+  let equalSelected = myTags.value.filter(
+    tag => (tag.cat + "." + tag.tag) == searchText.value || (tag.cat + "." + tag.tag) == "neu." + searchText.value
+  );
+  return equalUnselected.concat(equalSelected);
 });
 
 const optionsLength = computed(() => {
@@ -77,6 +93,10 @@ const optionsLength = computed(() => {
   }
 })
 
+function searchTags() {
+  showOptions.value = true
+}
+
 function selectTag(tag) {
   searchText.value = '';
 
@@ -85,13 +105,15 @@ function selectTag(tag) {
 }
 
 function newTag(tag) {
-  tags.value.push(tag)
-  myTags.value.push(tag)
+  var newTagObj = { "cat": "neu", "tag": searchText.value }
+  tags.value.push(newTagObj)
+  myTags.value.push(newTagObj)
   searchText.value = ''
+  selectedIndex.value = -1
 }
 
 function removeTag(tag) {
-  var sodeli = myTags.value.filter(element => element !== tag)
+  var sodeli = myTags.value.filter(element => (element.cat !== tag.cat || element.tag !== tag.tag))
   myTags.value = sodeli
 }
 
@@ -108,7 +130,15 @@ function handleKeydown(event) {
       selectedIndex.value = 0;
     }
   } else if (key === 'Enter') {
-    selectTag(matchingTags.value[selectedIndex.value]);
+    if (equalTags.value.length == 0 && searchText.value.length > 0) { // newTag vorhanden
+      if (selectedIndex.value > 0) {
+        selectTag(matchingTags.value[selectedIndex.value - 1]);
+      } else {
+        newTag(searchText.value)
+      }
+    } else {
+      selectTag(matchingTags.value[selectedIndex.value]);
+    }
   } else if (key === 'Escape') {
     showOptions.value = !showOptions.value;
   }
@@ -143,6 +173,7 @@ function selectedOption(index) {
   margin-right: 1em;
   background-color: lightblue
 }
+
 .tagList {
   display: inline-block;
   width: 50%;
@@ -156,7 +187,8 @@ function selectedOption(index) {
   list-style-type: none;
   padding-left: 0
 }
+
 .selected {
- background-color: #ccc;
+  background-color: #ccc;
 }
 </style>
