@@ -83,7 +83,14 @@ const matchingTags = computed(() => {
     } else {
       filtered = matching
     }
-    return filtered.sort((a, b) => b.cat - a.cat)
+    filtered.sort((a, b) => {
+      if (a.cat !== b.cat) {
+        return a.cat.localeCompare(b.cat)
+      } else {
+        return a.tag.localeCompare(b.tag)
+      }
+    })
+    return filtered
   } else {
     return [];
   }
