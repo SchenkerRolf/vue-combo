@@ -7,6 +7,7 @@
       @keydown="handleKeydown" 
       placeholder="Search or add a tag" 
       class="searchText"
+      ref="searchRef"
     />
 
     <div
@@ -143,6 +144,8 @@ function selectTag(tag) {
 
   myTags.value.push(tag)
   selectedIndex.value = -1
+
+  focusSearch()
 }
 
 
@@ -160,6 +163,7 @@ function newTag(tag) {
 function removeTag(tag) {
   var sodeli = myTags.value.filter(element => (element.cat !== tag.cat || element.tag !== tag.tag))
   myTags.value = sodeli
+  focusSearch()
 }
 
 
@@ -202,6 +206,16 @@ function selectedOption(index) {
     if (selectedIndex.value == index) {
       return "selected"
     }
+  }
+}
+
+
+// set focus to search field
+const searchRef = ref(null)
+
+const focusSearch = () => {
+  if (searchRef.value) {
+    searchRef.value.focus()
   }
 }
 
