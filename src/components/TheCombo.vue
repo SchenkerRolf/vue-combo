@@ -69,13 +69,13 @@
 </template>
 
 <script setup>
-import { ref, computed } from 'vue';
+import { ref, computed } from 'vue'
 
-const tags = ref([{ cat: 'prj', tag: 'abcd' }, { cat: 'lala', tag: 'asdf' }, { cat: 'abc', tag: 'sdfg' }]); // Initial list of tags
-const searchText = ref('');
-const myTags = ref([]);
-const selectedIndex = ref(-1);
-const showOptions = ref(true);
+const tags = ref([{ cat: 'prj', tag: 'abcd' }, { cat: 'lala', tag: 'asdf' }, { cat: 'abc', tag: 'sdfg' }]) // Initial list of tags
+const searchText = ref('')
+const myTags = ref([])
+const selectedIndex = ref(-1)
+const showOptions = ref(true)
 
 
 // list of existing tags to display
@@ -85,7 +85,7 @@ const matchingTags = computed(() => {
     // tag includes search text
     let matching = tags.value.filter(
       tag => (tag.cat + "." + tag.tag).includes(searchText.value)
-    );
+    )
     // tag is not selected
     let filtered = []
     if (myTags.value.length > 0) {
@@ -104,9 +104,9 @@ const matchingTags = computed(() => {
     })
     return filtered
   } else {
-    return [];
+    return []
   }
-});
+})
 
 
 // is this tag already selected?
@@ -114,12 +114,12 @@ const equalTags = computed(() => {
   // array contains 
   let equalUnselected = tags.value.filter(
     tag => (tag.cat + "." + tag.tag) == searchText.value || (tag.cat + "." + tag.tag) == "neu." + searchText.value
-  );
+  )
   let equalSelected = myTags.value.filter(
     tag => (tag.cat + "." + tag.tag) == searchText.value || (tag.cat + "." + tag.tag) == "neu." + searchText.value
-  );
-  return equalUnselected.concat(equalSelected);
-});
+  )
+  return equalUnselected.concat(equalSelected)
+})
 
 
 // how many options should be displayed?
@@ -140,7 +140,7 @@ function searchTags() {
 
 // existing tag is selected
 function selectTag(tag) {
-  searchText.value = '';
+  searchText.value = ''
 
   myTags.value.push(tag)
   selectedIndex.value = -1
@@ -169,29 +169,29 @@ function removeTag(tag) {
 
 // keyboard control
 function handleKeydown(event) {
-  const key = event.key;
+  const key = event.key
   if (key === 'ArrowUp') {
-    selectedIndex.value--;
+    selectedIndex.value--
     if (selectedIndex.value < 0) {
-      selectedIndex.value = optionsLength.value - 1;
+      selectedIndex.value = optionsLength.value - 1
     }
   } else if (key === 'ArrowDown') {
-    selectedIndex.value++;
+    selectedIndex.value++
     if (selectedIndex.value >= optionsLength.value) {
-      selectedIndex.value = 0;
+      selectedIndex.value = 0
     }
   } else if (key === 'Enter') {
     if (equalTags.value.length == 0 && searchText.value.length > 0) { // newTag vorhanden
       if (selectedIndex.value > 0) {
-        selectTag(matchingTags.value[selectedIndex.value - 1]);
+        selectTag(matchingTags.value[selectedIndex.value - 1])
       } else {
         newTag(searchText.value)
       }
     } else {
-      selectTag(matchingTags.value[selectedIndex.value]);
+      selectTag(matchingTags.value[selectedIndex.value])
     }
   } else if (key === 'Escape') {
-    showOptions.value = !showOptions.value;
+    showOptions.value = !showOptions.value
   }
 }
 
