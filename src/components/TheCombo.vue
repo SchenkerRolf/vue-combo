@@ -71,7 +71,8 @@
 <script setup>
 import { ref, computed } from 'vue'
 
-const tags = ref([{ cat: 'prj', tag: 'abcd' }, { cat: 'lala', tag: 'asdf' }, { cat: 'abc', tag: 'sdfg' }]) // Initial list of tags
+// Initial list of tags
+const tags = ref([{ cat: 'prj', tag: 'abcd' }, { cat: 'prj', tag: 'eaa' }, { cat: 'prj', tag: 'aaa' }, { cat: 'lala', tag: 'asdf' }, { cat: 'abc', tag: 'sdfg' }])
 const searchText = ref('')
 const myTags = ref([])
 const selectedIndex = ref(-1)
@@ -256,7 +257,7 @@ const focusSearch = () => {
 }
 
 ul.tagList li {
-  height: 4.5ex;
+  height: 4.1ex;
 }
 
 .tagList .tag {
